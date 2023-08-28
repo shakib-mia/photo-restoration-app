@@ -10,6 +10,7 @@ function App() {
 
 
   const store = { file: file, setFile, setDropping, dropping }
+  // console.log();
 
   return (
     <AppContext.Provider value={store}>

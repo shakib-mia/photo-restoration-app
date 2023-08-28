@@ -39,7 +39,7 @@ const ConfirmModal = () => {
             url: 'https://ai-powered-photo-restoration.p.rapidapi.com/',
             headers: {
                 'content-type': 'application/json',
-                'X-RapidAPI-Key': 'e338dcb1f0mshec22f33063b33c8p133b86jsnbecc8f05b156',
+                'X-RapidAPI-Key': import.meta.env.VITE_API_KEY,
                 'X-RapidAPI-Host': 'ai-powered-photo-restoration.p.rapidapi.com'
             },
             data: {
@@ -47,10 +47,11 @@ const ConfirmModal = () => {
                 withScratch: true
             }
         };
+
         url.length && axios.request(options).then(res => {
-            setOutputUrl(res.data.result)
             if (res.data.result) {
                 setLoading(false)
+                setOutputUrl(res.data.result)
                 gsap.to(firstImageRef.current, { left: '-600px', duration: 1 })
                 gsap.to(secondImageRef.current, { left: '600px', duration: 1 })
             }
@@ -71,12 +72,15 @@ const ConfirmModal = () => {
                         </div>
                     </div>
                     <div className='absolute left-0 right-0 top-0 bottom-0 m-auto z-[9999] w-[500px] h-[500px]' ref={secondImageRef}>
-                        <img src={outputUrl} className='w-full' alt="" />
-                        <h2 className='text-center mt-4 text-white text-2xl'>The Result</h2>
-
+                        {outputUrl.length ? <>
+                            <img src={outputUrl} className='w-full' alt="" />
+                            <h2 className='text-center mt-4 text-white text-2xl'>The Result</h2>
+                        </> : <></>}
                     </div>
                 </div>
-                {!outputUrl.length > 0 && <button className='text-center text-white px-3 py-1 bg-green-600 rounded mt-4 absolute bottom-40 left-0 right-0 m-auto w-fit' onClick={handleImageSubmit}>Confirm</button>}
+                {!outputUrl.length > 0 &&
+                    <button className='text-center text-white px-3 py-1 bg-green-600 rounded absolute bottom-28 left-0 right-0 m-auto w-fit' onClick={handleImageSubmit}>Confirm</button>
+                }
             </div>
             <button className='text-white absolute top-5 right-7 text-[50px]' onClick={() => setFile(null)}>&times;</button>
         </div>
